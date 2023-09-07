@@ -1,0 +1,34 @@
+<div class="container">
+    <h2>Lig Dashnoard</h2>
+    <button (click)="clickHandler()">Get Data</button>
+    <div class="table-conatiner">
+        <table class="table">
+            <thead>
+              <tr>
+                <th class="header-data" >index</th>
+                <th class="header-data" *ngFor="let header of headerColumns">{{header}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of ligDataSource; index as i ;count as rowCount" class="row-data" #testRowCount>
+                <td class="cell-data user">
+                    {{i+1}}
+                </td>
+                <td class="cell-data user">
+                  {{row.product_code}}
+                </td>
+              </tr>
+            </tbody>
+        </table>     
+        <div class="pagination-container pager-1">
+            <div class="pagination-number-container">
+                <div class="pagination-number">1</div>
+                <div class="pagination-number">12</div>
+                <div class="pagination-number">13</div>
+            </div>
+        </div>
+    </div>
+    <div class="pagination-container pager-2">
+
+    </div>
+</div>
