@@ -1,0 +1,13 @@
+:host{
+    overflow: auto;
+    height: 100%;
+    display: block;
+}
+
+.container{
+    height: 100%;
+}
+.content-container{
+    height: 90%;
+
+}

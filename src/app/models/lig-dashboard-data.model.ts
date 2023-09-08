@@ -23,6 +23,7 @@ export interface LigDashboardDataModel    {
     "PRODUCT_BRAND": string //"SCOOTECH N",
     "date": string //"2023-08",
     "sap_cc_number_cp": string //""
+    [key:string] : string | number
 }
 
 export const LigDashboardDataModelHeaders =
