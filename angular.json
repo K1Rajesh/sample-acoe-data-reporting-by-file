@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "sample-acoe-data-reporting-by-file": {
+    "sample-acoe-data-reporting-with-api-v2": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/sample-acoe-data-reporting-by-file",
+            "outputPath": "dist/sample-acoe-data-reporting-with-api-v2",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -68,10 +68,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "sample-acoe-data-reporting-by-file:build:production"
+              "browserTarget": "sample-acoe-data-reporting-with-api-v2:build:production"
             },
             "development": {
-              "browserTarget": "sample-acoe-data-reporting-by-file:build:development"
+              "browserTarget": "sample-acoe-data-reporting-with-api-v2:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +79,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "sample-acoe-data-reporting-by-file:build"
+            "browserTarget": "sample-acoe-data-reporting-with-api-v2:build"
           }
         },
         "test": {
@@ -102,5 +102,5 @@
       }
     }
   },
-  "defaultProject": "sample-acoe-data-reporting-by-file"
+  "defaultProject": "sample-acoe-data-reporting-with-api-v2"
 }
