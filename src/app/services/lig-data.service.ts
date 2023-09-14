@@ -20,7 +20,8 @@ export class LigDataService{
     }
 
     public getLigData():Observable<any>{
-        return this.httpClient.get<any>("http://10.29.3.4:3003/saml-sp")
+        //http://10.29.3.4:3003/saml-sp
+        return this.httpClient.get<any>("http://10.29.2.4:8000/lpg_data4")
     }
 
 

@@ -1,13 +1,22 @@
 <div class="container">
-    <div> Lig Dashnoard </div>
-    <button (click)="clickHandler()">Get Data</button>
+    <h2> Lig Dashnoard </h2>
+    <button (click)="getSourceDataclickHandler()">Get Data</button>
+    <ng-container *ngIf="isShowTableLoader">Loading...</ng-container>
     <div class="table-conatiner">
         <table class="table">
             <!-- <div class="table-head-container">
             </div> -->
             <thead>
               <tr>
-                <th class="header-data" *ngFor="let header of headerColumns">{{header}}</th>
+                <th class="header-data" *ngFor="let header of headerColumns">
+                  <div class="header-content">
+                    <span>{{ header | ligHeader }}</span>
+                    <span class="sort-icon">
+                      <i class="icon-sort-asc" (click)="sort(header,'asc')"></i>
+                      <i class="icon-sort-desc" (click)="sort(header,'desc')"></i>
+                    </span>
+                  </div>
+                </th>
               </tr>
             </thead>
             <!-- <div class="table-body-container">
@@ -24,8 +33,26 @@
     </div>
     <div class="pagination-container pager-2">
       <div class="pagination-number-container">
-        <div class="pagination-number" *ngFor="let pageNumber of pageNumberList"
+        <div class="pagination-number" *ngIf="(currentPageNumber > paginationMinIndex)"
+        (click)="pageSelectHandler('previous_page')"> &lt;&lt;</div>
+        <div class="pagination-number"
+        [ngClass]="{ 'active' : paginationMinIndex===currentPageNumber }"
+        (click)="pageSelectHandler(paginationMinIndex)">{{paginationMinIndex}}</div>
+
+        <div class="pagination-number" 
+        [ngClass]="{ 'active' : pageNumber==currentPageNumber }"
+        *ngFor="let pageNumber of snippetPageNumberList"
         (click)="pageSelectHandler(pageNumber)">{{pageNumber}}</div>
+        
+        <div class="pagination-number active"
+        [ngClass]="{ 'active' : paginationMaxIndex===currentPageNumber }"
+        (click)="pageSelectHandler(paginationMaxIndex)">{{paginationMaxIndex}}</div>
+        <div class="pagination-number" *ngIf="(currentPageNumber < paginationMaxIndex)"
+        (click)="pageSelectHandler('next_page')"> &gt;&gt;</div>
+
+        <!-- <div class="pagination-number" *ngFor="let pageNumber of pageNumberList"
+        (click)="pageSelectHandler($event)">{{pageNumber}}</div> -->
+
     </div>
     </div>
 </div>

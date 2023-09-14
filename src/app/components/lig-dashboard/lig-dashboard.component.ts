@@ -1,80 +1,58 @@
 import { Component, OnDestroy, OnInit  } from '@angular/core';
 import { LigDataService } from 'src/app/services/lig-data.service';
-import  { LigDashboardDataModel, LigDashboardDataModelHeaders, SampleLigDashboardSnippetData } from '../../models/lig-dashboard-data.model'
+import  { LigDashboardDataModel, LigDashboardAllHeaders, LigDashboardTableViewHeaders } from '../../models/lig-dashboard-data.model'
 import { Subscription } from 'rxjs';
+import { LigDashboardModel } from '../../domain/models/lig-dashboard.model'
+
 
 @Component({
   selector: 'app-lig-dashboard',
   templateUrl: './lig-dashboard.component.html',
-  styleUrls: ['./lig-dashboard.component.css']
+  styleUrls: ['./lig-dashboard.component.css'],
+  providers: [LigDashboardModel]
 })
 export class LigDashboardComponent implements OnInit , OnDestroy {
-
-  public ligDataSource : Array<LigDashboardDataModel> | undefined = undefined;
-  public currentPageDataSource : Array<LigDashboardDataModel> | undefined = undefined;
-  
-  private _headerColumns : Array<string>;
-
-  public noOfRowPerPage: number = 100;
-  public paginationMaxIndex : number = 0;
-  private subsList : Array<Subscription> = new Array<Subscription>();
-  public pageNumberList : Array<number> = new Array<number>();
-  public currentPageNumber : number = 1;
-
-
-  constructor(private ligDataService:LigDataService) {
-    this._headerColumns  = LigDashboardDataModelHeaders
-   }
+  constructor(private ligDashboardModel : LigDashboardModel) {
+  }
   get headerColumns(): Array<string> {
-    return  this._headerColumns;
+    return  this.ligDashboardModel.headerColumns;
+  }
+  get paginationMinIndex():number{
+    return  this.ligDashboardModel.paginationMinIndex;
+  }
+  get paginationMaxIndex():number{
+    return  this.ligDashboardModel.paginationMaxIndex;
+  }
+  get currentPageNumber():number{
+    return  this.ligDashboardModel.currentPageNumber;
+  }
+  get snippetPageNumberList():Array<number | string>{
+    return  this.ligDashboardModel.snippetPageNumberList;
+  }
+  
+  get currentPageDataSource() : Array<LigDashboardDataModel> | undefined {
+    return this.ligDashboardModel.currentPageDataSource
+  }
+  get isShowTableLoader():boolean{
+    return this.ligDashboardModel.isShowTableLoader
   }
   ngOnInit(): void {
-    //this.subscribeLigData()
-    //this.ligDataSource = SampleLigDashboardSnippetData
-    
+    this.ligDashboardModel.init()
   }
-  public clickHandler(): void {
-    this.subscribeLigData(); 
+  public getSourceDataclickHandler(): void {
+    this.ligDashboardModel.getSourceDataclickHandler();
   }
-  private subscribeLigData(){
-    this.subsList.push(
-      this.ligDataService.getLigData()
-      .subscribe(
-        (ligData : Array<LigDashboardDataModel>) =>{
-          if(ligData){
-            //console.log(ligData);
-            this.initDataSouce(ligData)
-          }
-        }, 
-        (err:any) =>{console.log("getLigData API Error: ",err)} 
-      )
-    )
-  }
-  public initDataSouce(ligData : Array<LigDashboardDataModel>){
-    this.ligDataSource = ligData
-    this.paginationMaxIndex = this.noOfRowPerPage ? ligData.length / this.noOfRowPerPage : 0;
-    this.setPageNumberList(1,this.paginationMaxIndex)
-    this.setCurrentPageDataSource();
 
+  public pageSelectHandler(pageSelectedNumberVal:string | number):void{
+    this.ligDashboardModel.pageSelectHandler(pageSelectedNumberVal)
   }
-  public setPageNumberList(minIndex:number, maxIndex:number):void{
-    for(let i = minIndex; i <= maxIndex; i++){
-      this.pageNumberList.push(i)
-    }
-    
+  public sort(field:string, sortOrder:string){
+    this.ligDashboardModel.dataManipulationSort(field, sortOrder)
   }
-  public pageSelectHandler(pageNumber : number):void{
-    this.currentPageNumber = pageNumber;
-    this.setCurrentPageDataSource();
-  }
-  public setCurrentPageDataSource():void{
-    const startSliceIndex = (this.currentPageNumber - 1)*100;
-    const endSliceIndex = ((this.currentPageNumber - 1)*100)+ this.noOfRowPerPage;
-    this.currentPageDataSource = this.ligDataSource?.slice( startSliceIndex,  endSliceIndex)
-  }
+ 
 
   public ngOnDestroy(): void {
-    this.subsList.forEach((sub)=>sub.unsubscribe())
+    this.ligDashboardModel.destroy();
   }
 
 }

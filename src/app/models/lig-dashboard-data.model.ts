@@ -26,7 +26,7 @@ export interface LigDashboardDataModel    {
     [key:string] : string | number
 }
 
-export const LigDashboardDataModelHeaders =
+export const LigDashboardAllHeaders =
 [
  "product_code",
  "qrcode_status",
@@ -52,6 +52,65 @@ export const LigDashboardDataModelHeaders =
  "PRODUCT_BRAND",
  "date",
  "sap_cc_number_cp"
+]
+
+export const LigDashboardTableViewHeaders =
+[
+    "region",
+    "SALES_OFFICE_NAME",
+    "SALES_GROUP_NAME",
+    "sap_cc_number",
+    "NAME",
+    "user_persona",
+    "mobile_no",
+    "PRODUCT_CODE",
+    "PRODUCT_NAME",
+    "pincode",
+    "taluka",
+    "district",
+    "state",
+    "txn_count",
+    "txn_amount",
+]
+//LigDashboardDataModelHeaders
+export const LigDashboardTableHeaders = LigDashboardTableViewHeaders;
+
+export const LigDashboardTableHeadersApiMapping: Map<string,string> = new Map([
+    ['region','BI Region'],
+    ['SALES_OFFICE_NAME','BI Territory'],
+    ['SALES_GROUP_NAME','BI Sales Area'], 
+    ['sap_cc_number','Channel Partner'], 
+    ['NAME','BU Primary customer name'],
+    ['user_persona','LIG User Persona'],
+    ['mobile_no','LIG Mobile number'],
+    ['PRODUCT_CODE','LIG Product Code'], 
+    ['PRODUCT_NAME','LIG Product Name' ],
+    ['pincode','LIG PinCode' ],
+    ['taluka','LIG Taluka'],
+    ['district','LIG District' ],
+    ['state','LIG State' ],
+    ['txn_count','Coupon count'],
+    ['txn_amount','Coupon amount' ]
+])
+
+
+const x =
+[
+    "region",
+    "SALES_OFFICE_NAME",
+    "SALES_GROUP_NAME",
+    "sap_cc_number",
+    "NAME",
+    "user_persona",
+    "mobile_no",
+    "PRODUCT_CODE",
+    "PRODUCT_NAME",
+    "pincode",
+    "taluka",
+    "district",
+    "state",
+    "txn_count",
+    "txn_amount",
 ]
 
 export const SampleLigDashboardSnippetData : Array <LigDashboardDataModel> = [ {
