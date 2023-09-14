@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit  } from '@angular/core';
-import { LigDataService } from 'src/app/services/lig-data.service';
-import  { LigDashboardDataModel, LigDashboardAllHeaders, LigDashboardTableViewHeaders } from '../../models/lig-dashboard-data.model'
-import { Subscription } from 'rxjs';
+import  { LigDashboardDataModel } from '../../models/lig-dashboard-data.model'
 import { LigDashboardModel } from '../../domain/models/lig-dashboard.model'
-
+import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-lig-dashboard',
@@ -12,6 +12,9 @@ import { LigDashboardModel } from '../../domain/models/lig-dashboard.model'
   providers: [LigDashboardModel]
 })
 export class LigDashboardComponent implements OnInit , OnDestroy {
+  myControl = new FormControl('');
+  options: string[] = ['One', 'Two', 'Three'];
+  filteredOptions: Observable<string[]> = new Observable<string[]>();
   constructor(private ligDashboardModel : LigDashboardModel) {
   }
   get headerColumns(): Array<string> {
@@ -37,7 +40,16 @@ export class LigDashboardComponent implements OnInit , OnDestroy {
     return this.ligDashboardModel.isShowTableLoader
   }
   ngOnInit(): void {
-    this.ligDashboardModel.init()
+    this.ligDashboardModel.init();
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || '')),
+    );
+  }
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
   public getSourceDataclickHandler(): void {
     this.ligDashboardModel.getSourceDataclickHandler();

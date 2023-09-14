@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LigDashboardComponent } from './components/lig-dashboard/lig-dashboard.component';
+
 import { HttpClientModule } from '@angular/common/http';
-import { LigHeaderPipe } from './components/lig-dashboard/lig-header.pipe';
+
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LigDashboardComponent,
-    LigHeaderPipe
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

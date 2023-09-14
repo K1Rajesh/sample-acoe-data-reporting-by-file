@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LigDashboardComponent } from './components/lig-dashboard/lig-dashboard.component';
 
 const routes: Routes = [
   {
-    path:'lig-dashboard',
-    component: LigDashboardComponent
+    path:'',
+    loadChildren: () => import('./modules/dashboard/dashboard.module').then(m=>
+      m.DashboardModule)
+    
   }
 ];
 

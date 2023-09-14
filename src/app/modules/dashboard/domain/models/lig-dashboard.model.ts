@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { LigDataService } from 'src/app/services/lig-data.service';
+import { LigDataService } from 'src/app/modules/dashboard/services/lig-data.service';
 import  { LigDashboardDataModel, LigDashboardAllHeaders, LigDashboardTableViewHeaders } from '../../models/lig-dashboard-data.model'
 import { Subscription } from 'rxjs';
 
