@@ -1,10 +1,15 @@
 import { Injectable } from "@angular/core";
-import { LigDataService } from 'src/app/modules/dashboard/services/lig-data.service';
-import  { LigDashboardDataModel, LigDashboardTableViewHeaders } from '../../models/lig-dashboard-data.model'
-import { Subscription } from 'rxjs';
 import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
+
+import { Observable , Subscription } from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
+
+import { LigDataService } from './../../services/lig-data.service';
+
+import  { LigDashboardDataModel, LigDashboardTableViewHeaders } from '../../models/lig-dashboard-data.model'
+import { FilterIModel } from './../../models/api/lig-data-reponse.model';
+
+
 
 @Injectable()
 export class LigDashboardModel {
@@ -28,7 +33,25 @@ export class LigDashboardModel {
     public channelParnterFilterOptionsAll: string[] = [];
     public channelParnterFilterOptionsCurrent$: Observable<string[]> = new Observable<string[]>();
 
+    public userPersonaFilterControl = new FormControl('');
+    public userPersonaFilterOptionsAll: string[] = [];
+    public userPersonaFilterOptionsCurrent$: Observable<string[]> = new Observable<string[]>();
+
+    public talukaFilterControl = new FormControl('');
+    public talukaFilterOptionsAll: string[] = [];
+    public talukaFilterOptionsCurrent$: Observable<string[]> = new Observable<string[]>();
+
+    public stateFilterControl = new FormControl('');
+    public stateFilterOptionsAll: string[] = [];
+    public stateFilterOptionsCurrent$: Observable<string[]> = new Observable<string[]>();
+
+    public biTerriotoaryFilterControl = new FormControl('');
+    public biTerriotoaryFilterOptionsAll: string[] = [];
+    public biTerriotoaryFilterOptionsCurrent$: Observable<string[]> = new Observable<string[]>();
+
     /* ------------------------ filter related propertires start --------------------- */
+
+    public ligDataServiceLigData$ : Observable<Array<LigDashboardDataModel>> | undefined = undefined;
     
     constructor(private ligDataService:LigDataService) {
         this.headerColumns  = LigDashboardTableViewHeaders
@@ -43,13 +66,21 @@ export class LigDashboardModel {
       this.subscribeLigData(); 
     }
     private subscribeLigData(){
+      this.ligDataServiceLigData$ = this.ligDataService.getLigData();
+
         this.subsList.push(
-          this.ligDataService.getLigData()
+          this.ligDataServiceLigData$
           .subscribe(
-            (ligData : Array<LigDashboardDataModel>) =>{
+            (ligData : any) =>{
               if(ligData){
-                //console.log(ligData);
-                this.initDataSource(ligData)
+                if( ligData.data){
+                  //console.log(ligData);
+                  this.initDataSource(ligData.data)
+                }
+                if(ligData.filters){
+                  //console.log("user_persona unique val:", ligData.filters.user_persona)
+                  this.setFilterValues(ligData.filters)
+                }         
               }
             }, 
             (err:any) =>{console.log("getLigData API Error: ",err)} 
@@ -66,7 +97,7 @@ export class LigDashboardModel {
         this.setCurrentPageDataSource();
 
         //filter
-        this.setInitalFilterOptions(ligData)
+        //this.setInitalFilterOptions(ligData)
     
     }
 
@@ -149,25 +180,47 @@ export class LigDashboardModel {
     /* ------------------------ filter related functions start --------------------- */
 
 
-    private setInitalFilterOptions(ligData : Array<LigDashboardDataModel>):void{
-      let xSet : Set<string> = new Set<string>();
-      ligData.map((ligDataEle: LigDashboardDataModel)=>
-          xSet.add(ligDataEle.sap_cc_number)
-      )
-      this.channelParnterFilterOptionsAll = [...xSet]
-    }
+    // private setInitalFilterOptions(ligData : Array<LigDashboardDataModel>):void{
+    //   let channelParnterSet : Set<string> = new Set<string>();
+    //   ligData.map((ligDataEle: LigDashboardDataModel)=>
+    //         channelParnterSet.add(ligDataEle.sap_cc_number)
+    //   )
+    //   this.channelParnterFilterOptionsAll = [...channelParnterSet]
+    // }
+
     public subscribeFilterValueChanges(){
+
       this.channelParnterFilterOptionsCurrent$ = this.channelParnterFilterControl.valueChanges.pipe(
         startWith(''),
-        map(value => this._filter(value || '')),
+        map(value => this._filter(this.channelParnterFilterOptionsAll , value || '')),
       );
+
+      this.userPersonaFilterOptionsCurrent$ = this.userPersonaFilterControl.valueChanges.pipe(
+        startWith(''),
+        map(value =>{
+          const filterValue = value.toLowerCase();
+          if(!filterValue){
+            return this.userPersonaFilterOptionsAll;
+          }
+          return this.userPersonaFilterOptionsAll.filter(option => option.toLowerCase().startsWith(filterValue));
+        } ),
+      );
+      //this._filter(this.userPersonaFilterOptionsAll , value || '')
+
     }
-    private _filter(value: string): string[] {
-      const filterValue = value.toLowerCase();
+    private _filter( filterData:Array<string> , filterValue: string): string[] {
+      const filterValueLower = filterValue.toLowerCase();
       if(!filterValue){
-        this.channelParnterFilterOptionsAll;
+        filterData;
       }
-      return this.channelParnterFilterOptionsAll.filter(option => option.toLowerCase().startsWith(filterValue));
+      return filterData.filter(option => option.toLowerCase().startsWith(filterValueLower));
+    }
+    public setFilterValues(filters:FilterIModel){
+      this.channelParnterFilterOptionsAll = filters.ChannelPartner;
+      this.userPersonaFilterOptionsAll = filters.LIGUserPersona;
+      this.talukaFilterOptionsAll = filters.LIGTaluka;
+      this.stateFilterOptionsAll = filters.LIGState;
+      this.biTerriotoaryFilterOptionsAll = filters.BITerritory
     }
 
     /* ------------------------ filter related functions start --------------------- */
