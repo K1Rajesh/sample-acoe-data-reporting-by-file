@@ -16,6 +16,23 @@
           </mat-autocomplete>
         </mat-form-field>
       </div>
+      <div class="filter-form-item user-persona">
+        <mat-form-field class="example-full-width">
+          <mat-label>User Persona</mat-label>
+          <!-- placeholder="Pick one", aria-label="Channel Parnter" -->
+          <input type="text"
+                 
+                 matInput
+                 [formControl]="userPersonaFilterControl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of userPersonaFilterOptionsCurrent$ | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
       <div *ngIf="false" class="filter-form-item channel-partner">
         <mat-form-field class="example-full-width">
           <mat-label>LIG Product Brand</mat-label>

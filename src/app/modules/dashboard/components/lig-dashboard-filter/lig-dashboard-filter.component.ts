@@ -17,6 +17,12 @@ export class LigDashboardFilterComponent implements OnInit {
   get channelParnterFilterOptionsCurrent$():Observable<string[]>{
     return this.ligDashboardModel.channelParnterFilterOptionsCurrent$
   }
+  get userPersonaFilterControl():FormControl{
+    return this.ligDashboardModel.userPersonaFilterControl
+  }
+  get userPersonaFilterOptionsCurrent$():Observable<string[]>{
+    return this.ligDashboardModel.userPersonaFilterOptionsCurrent$
+  }
   ngOnInit(): void {
   }
 
