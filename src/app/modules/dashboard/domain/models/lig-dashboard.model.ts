@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
 import { LigDataService } from 'src/app/modules/dashboard/services/lig-data.service';
-import  { LigDashboardDataModel, LigDashboardAllHeaders, LigDashboardTableViewHeaders } from '../../models/lig-dashboard-data.model'
+import  { LigDashboardDataModel, LigDashboardTableViewHeaders } from '../../models/lig-dashboard-data.model'
 import { Subscription } from 'rxjs';
-
+import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 @Injectable()
 export class LigDashboardModel {
@@ -20,16 +22,25 @@ export class LigDashboardModel {
     public snippetPageNumberList : Array<number | string> = new Array<number | string>();
     public currentPageNumber : number = 1;
     public isShowTableLoader: boolean = false;
+
+    /* ------------------------ filter related propertires start --------------------- */
+    public channelParnterFilterControl = new FormControl('');
+    public channelParnterFilterOptionsAll: string[] = [];
+    public channelParnterFilterOptionsCurrent$: Observable<string[]> = new Observable<string[]>();
+
+    /* ------------------------ filter related propertires start --------------------- */
     
     constructor(private ligDataService:LigDataService) {
         this.headerColumns  = LigDashboardTableViewHeaders
     }
-     init(){
-    //this.subscribeLigData()
-    //this.ligDataSource = SampleLigDashboardSnippetData
-     }
-     public getSourceDataclickHandler(): void {
-        this.subscribeLigData(); 
+    init(){
+      //this.subscribeLigData()
+      //this.ligDataSource = SampleLigDashboardSnippetData
+      this.subscribeFilterValueChanges();
+    }
+
+    public getSourceDataclickHandler(): void {
+      this.subscribeLigData(); 
     }
     private subscribeLigData(){
         this.subsList.push(
@@ -47,10 +58,15 @@ export class LigDashboardModel {
     }    
     public initDataSource(ligData : Array<LigDashboardDataModel>){
         this.ligDataSource = ligData
+
+        //pagination
         this.paginationMaxIndex = this.noOfRowPerPage ? Math.floor(ligData.length / this.noOfRowPerPage) : 1;
         this.setPageNumberList()
         this.setSnippetPageNumberList();
         this.setCurrentPageDataSource();
+
+        //filter
+        this.setInitalFilterOptions(ligData)
     
     }
 
@@ -59,8 +75,8 @@ export class LigDashboardModel {
           this.pageNumberList.push(i)
         }
         
-      }
-      public setSnippetPageNumberList():void{
+    }
+    public setSnippetPageNumberList():void{
         if(this.currentPageNumber && this.currentPageNumber < 5){
           this.snippetPageNumberList = [2,3,4,5,'...'];
         }else if(this.currentPageNumber >=5 && this.currentPageNumber < this.paginationMaxIndex - 5){
@@ -72,8 +88,8 @@ export class LigDashboardModel {
           this.paginationMaxIndex-2,this.paginationMaxIndex-1]
         }
         
-      }
-      public pageSelectHandler(pageSelectedNumberVal:string | number):void{
+    }
+    public pageSelectHandler(pageSelectedNumberVal:string | number):void{
         //const pageSelectedValue = (event.target as HTMLInputElement).value
     
         const pageSelectedNumber = parseInt(''+pageSelectedNumberVal);
@@ -82,25 +98,25 @@ export class LigDashboardModel {
           this.setSnippetPageNumberList();
           this.setCurrentPageDataSource();
         }
-      }
-      public pageSelect(pageSelectedNumberVal:string | number):void{
+    }
+    public pageSelect(pageSelectedNumberVal:string | number):void{
         //const pageSelectedValue = (event.target as HTMLInputElement).value
     
         const pageSelectedNumber = parseInt(''+pageSelectedNumberVal);
         if(pageSelectedNumber){
           this.setCurrentPageDataSource();
         }
-      }
-      public setCurrentPageDataSource():void{
+    }
+    public setCurrentPageDataSource():void{
         const startSliceIndex = (this.currentPageNumber - 1)*100;
         const endSliceIndex = ((this.currentPageNumber - 1)*100)+ this.noOfRowPerPage;
         this.currentPageDataSource = this.ligDataSource?.slice( startSliceIndex,  endSliceIndex)
-      }
-      public dataManipulationSort(field:string, sortOrder:string):void{
+    }
+    public dataManipulationSort(field:string, sortOrder:string):void{
         this.isShowTableLoader = true;
         setTimeout(()=>{this.sort(field,sortOrder)},0);  
-      }          
-      public sort(field:string, sortOrder:string):void{      
+    }          
+    public sort(field:string, sortOrder:string):void{      
         this.ligDataSource?.sort((obj_1:LigDashboardDataModel,obj_2:LigDashboardDataModel)=>{
                 if(typeof obj_1[field] === "string"){
                   //const obj_1_field = String(obj_1[field]).trim()?.toLocaleLowerCase()
@@ -124,12 +140,38 @@ export class LigDashboardModel {
         })
 
         this.dataManipulationCompleted();
-      }
-      public dataManipulationCompleted():void{
+    }
+    public dataManipulationCompleted():void{
         this.pageSelect(this.currentPageNumber);
         this.isShowTableLoader = false;  
+    }
+
+    /* ------------------------ filter related functions start --------------------- */
+
+
+    private setInitalFilterOptions(ligData : Array<LigDashboardDataModel>):void{
+      let xSet : Set<string> = new Set<string>();
+      ligData.map((ligDataEle: LigDashboardDataModel)=>
+          xSet.add(ligDataEle.sap_cc_number)
+      )
+      this.channelParnterFilterOptionsAll = [...xSet]
+    }
+    public subscribeFilterValueChanges(){
+      this.channelParnterFilterOptionsCurrent$ = this.channelParnterFilterControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filter(value || '')),
+      );
+    }
+    private _filter(value: string): string[] {
+      const filterValue = value.toLowerCase();
+      if(!filterValue){
+        this.channelParnterFilterOptionsAll;
       }
-     public destroy():void{
+      return this.channelParnterFilterOptionsAll.filter(option => option.toLowerCase().startsWith(filterValue));
+    }
+
+    /* ------------------------ filter related functions start --------------------- */
+    public destroy():void{
         this.subsList.forEach((sub)=>sub.unsubscribe())
-     }
+    }
 }
