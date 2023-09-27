@@ -1,25 +1,14 @@
 <div class="container">
+
     <h2> Lig Dashnoard </h2>
     <button (click)="getSourceDataclickHandler()">Get Data</button>
     <ng-container *ngIf="isShowTableLoader">Loading...</ng-container>
+
     <div class="filter-container">
-      <form class="example-form">
-        <mat-form-field class="example-full-width">
-          <mat-label>Number</mat-label>
-          <input type="text"
-                 placeholder="Pick one"
-                 aria-label="Number"
-                 matInput
-                 [formControl]="myControl"
-                 [matAutocomplete]="auto">
-          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-              {{option}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-      </form>
+        <app-lig-dashboard-filter></app-lig-dashboard-filter>
     </div>
+
+
     <div class="table-conatiner">
         <table class="table">
             <!-- <div class="table-head-container">

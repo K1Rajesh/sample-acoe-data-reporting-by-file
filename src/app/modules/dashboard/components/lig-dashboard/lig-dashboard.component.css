@@ -112,3 +112,10 @@ tr:nth-child(even){
     margin-top: 4px;
     margin-left: 4px;
   }
+
+
+/* -------------------filter css start --------------------------- */
+  .filter-container{
+    margin: 20px 0;
+  }
+/* -------------------filter css end --------------------------- */
