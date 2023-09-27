@@ -8,12 +8,14 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { LigDashboardFilterComponent } from './components/lig-dashboard-filter/lig-dashboard-filter.component';
 
 
 @NgModule({
   declarations: [
     LigDashboardComponent,
-    LigHeaderPipe
+    LigHeaderPipe,
+    LigDashboardFilterComponent
   ],
   imports: [
     CommonModule,
