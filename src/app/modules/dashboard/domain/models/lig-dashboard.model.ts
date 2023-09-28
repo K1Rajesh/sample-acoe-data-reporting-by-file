@@ -180,15 +180,6 @@ export class LigDashboardModel {
 
     /* ------------------------ filter related functions start --------------------- */
 
-
-    // private setInitalFilterOptions(ligData : Array<LigDashboardDataModel>):void{
-    //   let channelParnterSet : Set<string> = new Set<string>();
-    //   ligData.map((ligDataEle: LigDashboardDataModel)=>
-    //         channelParnterSet.add(ligDataEle.sap_cc_number)
-    //   )
-    //   this.channelParnterFilterOptionsAll = [...channelParnterSet]
-    // }
-
     public subscribeFilterValueChanges(){
 
       this.channelParnterFilterOptionsCurrent$ = this.channelParnterFilterControl.valueChanges.pipe(
@@ -234,7 +225,7 @@ export class LigDashboardModel {
       
     }
 
-    /* ------------------------ filter related functions start --------------------- */
+    /* ------------------------ filter related functions end --------------------- */
     public destroy():void{
         this.subsList.forEach((sub)=>sub.unsubscribe())
     }

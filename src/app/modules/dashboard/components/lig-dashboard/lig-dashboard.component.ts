@@ -1,12 +1,16 @@
 import { Component, OnDestroy, OnInit  } from '@angular/core';
+
 import  { LigDashboardDataModel } from '../../models/lig-dashboard-data.model'
-import { LigDashboardModel } from '../../domain/models/lig-dashboard.model'
+
+import { LigDashboardModel } from '../../domain/models/lig-dashboard.model';
+import { LigDashboardModel2 } from '../../domain/models/lig-dashboard2.model'
+
 
 @Component({
   selector: 'app-lig-dashboard',
   templateUrl: './lig-dashboard.component.html',
   styleUrls: ['./lig-dashboard.component.css'],
-  providers: [LigDashboardModel]
+  providers: [LigDashboardModel,LigDashboardModel2]
 })
 export class LigDashboardComponent implements OnInit , OnDestroy {
 

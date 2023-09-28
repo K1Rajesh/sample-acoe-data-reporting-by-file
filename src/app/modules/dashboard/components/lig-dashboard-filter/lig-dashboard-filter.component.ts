@@ -1,41 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 
-import { LigDashboardModel } from '../../domain/models/lig-dashboard.model'
+import { LigDashboardModel } from '../../domain/models/lig-dashboard.model';
+import { LigDashboardFilterModel } from '../../domain/models/lig-dashboard-filter.model'
+
 @Component({
   selector: 'app-lig-dashboard-filter',
   templateUrl: './lig-dashboard-filter.component.html',
-  styleUrls: ['./lig-dashboard-filter.component.css']
+  styleUrls: ['./lig-dashboard-filter.component.css'],
+  providers: [LigDashboardFilterModel]
 })
-export class LigDashboardFilterComponent implements OnInit {
+export class LigDashboardFilterComponent implements OnInit,OnDestroy {
 
-  constructor(private ligDashboardModel : LigDashboardModel) { }
+  constructor(private ligDashboardFilterModel : LigDashboardFilterModel) { }
   get channelParnterFilterControl():FormControl{
-    return this.ligDashboardModel.channelParnterFilterControl
+    return this.ligDashboardFilterModel.channelParnterFilterControl
   }
   get channelParnterFilterOptionsCurrent$():Observable<string[]>{
-    return this.ligDashboardModel.channelParnterFilterOptionsCurrent$
+    return this.ligDashboardFilterModel.channelParnterFilterOptionsCurrent$
   }
   get userPersonaFilterControl():FormControl{
-    return this.ligDashboardModel.userPersonaFilterControl
+    return this.ligDashboardFilterModel.userPersonaFilterControl
   }
   get userPersonaFilterOptionsCurrent$():Observable<string[]>{
-    return this.ligDashboardModel.userPersonaFilterOptionsCurrent$
+    return this.ligDashboardFilterModel.userPersonaFilterOptionsCurrent$
   }
   get talukaFilterControl():FormControl{
-    return this.ligDashboardModel.talukaFilterControl
+    return this.ligDashboardFilterModel.talukaFilterControl
   }
   get talukaFilterOptionsCurrent$():Observable<string[]>{
-    return this.ligDashboardModel.talukaFilterOptionsCurrent$
+    return this.ligDashboardFilterModel.talukaFilterOptionsCurrent$
   }
-
-
-
   ngOnInit(): void {
+    this.ligDashboardFilterModel.init();
   }
   public formSubmitHandler():void {
-    this.ligDashboardModel.formSubmitHandler()
+    this.ligDashboardFilterModel.formSubmitHandler()
+  }
+  ngOnDestroy(): void {
   }
 
 }
