@@ -4,11 +4,9 @@ import {FormControl} from '@angular/forms';
 import { Observable , Subscription, of } from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 
-import { LigDataService } from './../../services/lig-data.service';
 
 import { LigDashboardModel2} from './lig-dashboard2.model'
 
-import  { LigDashboardDataModel, LigDashboardTableViewHeaders } from '../../models/lig-dashboard-data.model'
 import { FilterIModel } from './../../models/api/lig-data-reponse.model';
 
 
@@ -42,33 +40,33 @@ export class LigDashboardFilterModel {
     /* ------------------------ filter related propertires start --------------------- */
 
   
-    get ligDataServiceLigData$() : Observable<Array<LigDashboardDataModel>> | undefined {
-      return this.ligDashBoardModel2.ligDataServiceLigData$
-    }
+    // get ligDataServiceLigData$() : Observable<Array<LigDashboardDataModel>> | undefined {
+    //   return this.ligDashBoardModel2.ligDataServiceLigData$
+    // }
     constructor(private ligDashBoardModel2 : LigDashboardModel2) {
 
     }
     init(){
-      this.subscribeLigData();
+      //this.subscribeLigData();
       this.subscribeFilterControlValueChanges();
     }
 
-    private subscribeLigData(payLoad?:{user_persona:string}):void{
+    // private subscribeLigData(payLoad?:{user_persona:string}):void{
 
-        this.subsList.push(
-           this.ligDataServiceLigData$!.subscribe(
-            (ligData : any) =>{
-              if(ligData){
-                if(ligData.filters){
-                  //console.log("user_persona unique val:", ligData.filters.user_persona)
-                  this.setFilterValues(ligData.filters)
-                }         
-              }
-            }, 
-            (err:any) =>{console.log("getLigData API Error: ",err)} 
-          )
-        )
-    }  
+    //     this.subsList.push(
+    //        this.ligDataServiceLigData$!.subscribe(
+    //         (ligData : any) =>{
+    //           if(ligData){
+    //             if(ligData.filters){
+    //               //console.log("user_persona unique val:", ligData.filters.user_persona)
+    //               this.setFilterValues(ligData.filters)
+    //             }         
+    //           }
+    //         }, 
+    //         (err:any) =>{console.log("getLigData API Error: ",err)} 
+    //       )
+    //     )
+    // }  
 
     public setFilterValues(filters:FilterIModel):void{
 

@@ -1,14 +1,10 @@
 import { Injectable } from "@angular/core";
-import {FormControl} from '@angular/forms';
 
-import { Observable , Subscription, of } from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import { Observable , Subscription} from 'rxjs';
 
 import { LigDataService } from './../../services/lig-data.service';
 
 import  { LigDashboardDataModel, LigDashboardTableViewHeaders } from '../../models/lig-dashboard-data.model'
-import { FilterIModel } from './../../models/api/lig-data-reponse.model';
-
 
 
 @Injectable()

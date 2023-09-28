@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 
-import { LigDashboardModel } from '../../domain/models/lig-dashboard.model';
 import { LigDashboardFilterModel } from '../../domain/models/lig-dashboard-filter.model'
 
 @Component({
