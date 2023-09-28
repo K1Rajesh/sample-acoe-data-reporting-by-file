@@ -23,7 +23,19 @@ export class LigDashboardFilterComponent implements OnInit {
   get userPersonaFilterOptionsCurrent$():Observable<string[]>{
     return this.ligDashboardModel.userPersonaFilterOptionsCurrent$
   }
+  get talukaFilterControl():FormControl{
+    return this.ligDashboardModel.talukaFilterControl
+  }
+  get talukaFilterOptionsCurrent$():Observable<string[]>{
+    return this.ligDashboardModel.talukaFilterOptionsCurrent$
+  }
+
+
+
   ngOnInit(): void {
+  }
+  public formSubmitHandler():void {
+    this.ligDashboardModel.formSubmitHandler()
   }
 
 }

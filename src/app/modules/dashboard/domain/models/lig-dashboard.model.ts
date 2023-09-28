@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import {FormControl} from '@angular/forms';
 
-import { Observable , Subscription } from 'rxjs';
+import { Observable , Subscription, of } from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 
 import { LigDataService } from './../../services/lig-data.service';
@@ -63,10 +63,10 @@ export class LigDashboardModel {
     }
 
     public getSourceDataclickHandler(): void {
-      this.subscribeLigData(); 
+      this.getLigDataCallAndSubscribe(); 
     }
-    private subscribeLigData(){
-      this.ligDataServiceLigData$ = this.ligDataService.getLigData();
+    private getLigDataCallAndSubscribe(payLoad?:{user_persona:string}){
+      this.ligDataServiceLigData$ = this.ligDataService.getLigData(payLoad);
 
         this.subsList.push(
           this.ligDataServiceLigData$
@@ -142,6 +142,7 @@ export class LigDashboardModel {
         const startSliceIndex = (this.currentPageNumber - 1)*100;
         const endSliceIndex = ((this.currentPageNumber - 1)*100)+ this.noOfRowPerPage;
         this.currentPageDataSource = this.ligDataSource?.slice( startSliceIndex,  endSliceIndex)
+        console.log(this.currentPageDataSource)
     }
     public dataManipulationSort(field:string, sortOrder:string):void{
         this.isShowTableLoader = true;
@@ -197,17 +198,16 @@ export class LigDashboardModel {
 
       this.userPersonaFilterOptionsCurrent$ = this.userPersonaFilterControl.valueChanges.pipe(
         startWith(''),
-        map(value =>{
-          const filterValue = value.toLowerCase();
-          if(!filterValue){
-            return this.userPersonaFilterOptionsAll;
-          }
-          return this.userPersonaFilterOptionsAll.filter(option => option.toLowerCase().startsWith(filterValue));
-        } ),
-      );
-      //this._filter(this.userPersonaFilterOptionsAll , value || '')
+        map(value => this._filter(this.userPersonaFilterOptionsAll , value || '')),
+     );
 
+     this.talukaFilterOptionsCurrent$ = this.talukaFilterControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(this.talukaFilterOptionsAll , value || '')),
+    );
+    
     }
+
     private _filter( filterData:Array<string> , filterValue: string): string[] {
       const filterValueLower = filterValue.toLowerCase();
       if(!filterValue){
@@ -216,11 +216,22 @@ export class LigDashboardModel {
       return filterData.filter(option => option.toLowerCase().startsWith(filterValueLower));
     }
     public setFilterValues(filters:FilterIModel){
+
       this.channelParnterFilterOptionsAll = filters.ChannelPartner;
       this.userPersonaFilterOptionsAll = filters.LIGUserPersona;
       this.talukaFilterOptionsAll = filters.LIGTaluka;
       this.stateFilterOptionsAll = filters.LIGState;
       this.biTerriotoaryFilterOptionsAll = filters.BITerritory
+
+      this.channelParnterFilterOptionsCurrent$= of(filters.ChannelPartner)
+      this.userPersonaFilterOptionsCurrent$= of(filters.LIGUserPersona)
+      this.talukaFilterOptionsCurrent$= of(filters.LIGTaluka)
+    }
+    public formSubmitHandler(){
+      const userPersona = this.userPersonaFilterControl.value
+      console.log("User Persona Filter Value", userPersona )
+      this.getLigDataCallAndSubscribe({user_persona:userPersona})
+      
     }
 
     /* ------------------------ filter related functions start --------------------- */
