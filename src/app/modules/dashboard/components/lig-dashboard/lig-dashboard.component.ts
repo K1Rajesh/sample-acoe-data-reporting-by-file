@@ -14,7 +14,7 @@ import { LigDashboardModel2 } from '../../domain/models/lig-dashboard2.model'
 })
 export class LigDashboardComponent implements OnInit , OnDestroy {
 
-  constructor(private ligDashboardModel : LigDashboardModel) {
+  constructor(private ligDashboardModel : LigDashboardModel2) {
   }
   get headerColumns(): Array<string> {
     return  this.ligDashboardModel.headerColumns;
@@ -37,6 +37,9 @@ export class LigDashboardComponent implements OnInit , OnDestroy {
   }
   get isShowTableLoader():boolean{
     return this.ligDashboardModel.isShowTableLoader
+  }
+  get filters():any{
+    return this.ligDashboardModel.filters;
   }
   ngOnInit(): void {
     this.ligDashboardModel.init();

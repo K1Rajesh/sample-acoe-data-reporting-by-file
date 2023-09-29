@@ -16,6 +16,8 @@ export class LigDashboardFilterModel {
 
     private subsList : Array<Subscription> = new Array<Subscription>();
 
+    public filters : any;
+
     /* ------------------------ filter related propertires start --------------------- */
     public channelParnterFilterControl = new FormControl('');
     public channelParnterFilterOptionsAll: string[] = [];
@@ -48,7 +50,7 @@ export class LigDashboardFilterModel {
     }
     init(){
       //this.subscribeLigData();
-      this.subscribeFilterControlValueChanges();
+      //this.subscribeFilterControlValueChanges();
     }
 
     // private subscribeLigData(payLoad?:{user_persona:string}):void{
@@ -70,15 +72,25 @@ export class LigDashboardFilterModel {
 
     public setFilterValues(filters:FilterIModel):void{
 
-      this.channelParnterFilterOptionsAll = filters.ChannelPartner;
-      this.userPersonaFilterOptionsAll = filters.LIGUserPersona;
-      this.talukaFilterOptionsAll = filters.LIGTaluka;
-      this.stateFilterOptionsAll = filters.LIGState;
-      this.biTerriotoaryFilterOptionsAll = filters.BITerritory
+      // this.channelParnterFilterOptionsAll = filters.ChannelPartner;
+      // this.userPersonaFilterOptionsAll = filters.LIGUserPersona;
+      // this.talukaFilterOptionsAll = filters.LIGTaluka;
+      // this.stateFilterOptionsAll = filters.LIGState;
+      // this.biTerriotoaryFilterOptionsAll = filters.BITerritory
 
-      this.channelParnterFilterOptionsCurrent$= of(filters.ChannelPartner)
-      this.userPersonaFilterOptionsCurrent$= of(filters.LIGUserPersona)
-      this.talukaFilterOptionsCurrent$= of(filters.LIGTaluka)
+      // this.channelParnterFilterOptionsCurrent$= of(filters.ChannelPartner)
+      // this.userPersonaFilterOptionsCurrent$= of(filters.LIGUserPersona)
+      // this.talukaFilterOptionsCurrent$= of(filters.LIGTaluka)
+
+      this.channelParnterFilterOptionsAll = filters?.ChannelPartner;
+      this.userPersonaFilterOptionsAll = filters?.LIGUserPersona;
+      this.talukaFilterOptionsAll = filters?.LIGTaluka;
+      this.stateFilterOptionsAll = filters?.LIGState;
+      this.biTerriotoaryFilterOptionsAll = filters?.BITerritory
+
+      this.channelParnterFilterOptionsCurrent$= of(filters?.ChannelPartner)
+      this.userPersonaFilterOptionsCurrent$= of(filters?.LIGUserPersona)
+      this.talukaFilterOptionsCurrent$= of(filters?.LIGTaluka)
     }
     public subscribeFilterControlValueChanges():void{
 
@@ -100,10 +112,16 @@ export class LigDashboardFilterModel {
     }
     private _filter( filterData:Array<string> , filterValue: string): string[] {
       const filterValueLower = filterValue.toLowerCase();
-      if(!filterValue){
-        filterData;
+      if(!filterData){
+        return [];
       }
-      return filterData.filter(option => option.toLowerCase().startsWith(filterValueLower));
+      else{
+        if(!filterValue){
+          return filterData;
+        }
+        return filterData.filter(option => option.toLowerCase().startsWith(filterValueLower));
+      }
+      
     }
     public formSubmitHandler():void{
       const userPersona = this.userPersonaFilterControl.value

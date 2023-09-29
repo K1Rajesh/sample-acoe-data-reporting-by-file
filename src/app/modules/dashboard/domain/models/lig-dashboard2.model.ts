@@ -22,6 +22,7 @@ export class LigDashboardModel2 {
     public snippetPageNumberList : Array<number | string> = new Array<number | string>();
     public currentPageNumber : number = 1;
     public isShowTableLoader: boolean = false;
+    public filters: any;
 
     public ligDataServiceLigData$ : Observable<Array<LigDashboardDataModel>> | undefined = undefined;
     
@@ -51,6 +52,9 @@ export class LigDashboardModel2 {
                     //console.log(ligData);
                     this.initDataSource(ligData.data)
                   }       
+                  if(ligData.filters){
+                    this.filters = ligData.filters
+                  }
                 }
               }, 
               (err:any) =>{console.log("getLigData API Error: ",err)} 
