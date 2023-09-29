@@ -13,16 +13,16 @@ export type  AggregateDataIModel =  {
 }
 
 export type  FilterIModel =  {
-    "biSalesArea": Array<string>,
-    "biTerritory": Array<string>,
-    "channelPartner": Array<string>,
-    "ligDistrict": Array<string>,
-    "ligProductBrand": Array<string>,
-    "ligProductCode": Array<string>,
-    "ligProductName": Array<string>,
-    "ligState": Array<string>,
-    "ligTaluka": Array<string>,
-    "ligUserPersona": Array<string>,
+    "SALES_GROUP_NAME": Array<string>,
+    "SALES_OFFICE_NAME": Array<string>,
+    "sap_cc_number": Array<string>,
+    "district": Array<string>,
+    "PRODUCT_BRAND": Array<string>,
+    "PRODUCT_CODE": Array<string>,
+    "PRODUCT_NAME": Array<string>,
+    "state": Array<string>,
+    "taluka": Array<string>,
+    "user_persona": Array<string>,
 }
 
 export interface DataIModel    {
