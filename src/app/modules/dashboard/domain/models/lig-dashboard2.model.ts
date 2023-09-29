@@ -4,6 +4,9 @@ import { Observable , Subscription} from 'rxjs';
 
 import { LigDataService } from './../../services/lig-data.service';
 
+
+import { LigDataRequestIModel } from './../../models/api/lig-data-request.model';
+import { LigDataResponseIModel } from './../../models/api/lig-data-reponse.model';
 import  { LigDashboardDataModel, LigDashboardTableViewHeaders } from '../../models/lig-dashboard-data.model'
 
 
@@ -24,7 +27,7 @@ export class LigDashboardModel2 {
     public isShowTableLoader: boolean = false;
     public filters: any;
 
-    public ligDataServiceLigData$ : Observable<Array<LigDashboardDataModel>> | undefined = undefined;
+    public ligDataServiceLigData$ : Observable<LigDataResponseIModel> | undefined = undefined;
     
 
     constructor(private ligDataService:LigDataService) {
@@ -38,7 +41,7 @@ export class LigDashboardModel2 {
         this.subscribeGetLigDataCall(); 
     }
 
-    public initateGetLigDataCall(payLoad?:{user_persona:string}){
+    public initateGetLigDataCall(payLoad?:LigDataRequestIModel){
         this.ligDataServiceLigData$ = this.ligDataService.getLigData(payLoad);
 
     }
@@ -46,7 +49,7 @@ export class LigDashboardModel2 {
         this.subsList.push(
             this.ligDataServiceLigData$!
             .subscribe(
-              (ligData : any) =>{
+              (ligData : LigDataResponseIModel ) =>{
                 if(ligData){
                   if( ligData.data){
                     //console.log(ligData);
