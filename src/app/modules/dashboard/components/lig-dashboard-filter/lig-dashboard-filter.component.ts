@@ -41,6 +41,14 @@ export class LigDashboardFilterComponent implements OnInit,OnChanges, OnDestroy 
     return this.ligDashboardFilterModel.talukaFilterOptionsCurrent$
   }
 
+  get biTerriotoaryFilterControl():FormControl{
+    return this.ligDashboardFilterModel.biTerriotoaryFilterControl
+  }
+  get biTerriotoaryFilterOptionsCurrent$():Observable<string[]>{
+    return this.ligDashboardFilterModel.biTerriotoaryFilterOptionsCurrent$
+  }
+
+
 
   ngOnInit(): void {
     this.ligDashboardFilterModel.init();
@@ -53,6 +61,9 @@ export class LigDashboardFilterComponent implements OnInit,OnChanges, OnDestroy 
   }
   public formSubmitHandler():void {
     this.ligDashboardFilterModel.formSubmitHandler()
+  }
+  public optionSelectedHandler(event:any):void {
+    this.ligDashboardFilterModel.optionSelectedHandler(event)
   }
   ngOnDestroy(): void {
   }

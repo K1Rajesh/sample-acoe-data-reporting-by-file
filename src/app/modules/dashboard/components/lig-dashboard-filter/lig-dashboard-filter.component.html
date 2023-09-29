@@ -10,7 +10,9 @@
                  [formControl]="channelParnterFilterControl"
                  [matAutocomplete]="autoChannelPartner">
           <mat-autocomplete autoActiveFirstOption #autoChannelPartner="matAutocomplete">
-            <mat-option *ngFor="let option of channelParnterFilterOptionsCurrent$ | async" [value]="option">
+            <mat-option *ngFor="let option of channelParnterFilterOptionsCurrent$ | async" 
+            [value]="option"
+            (optionSelected)="optionSelectedHandler($event)">
               {{option}}
             </mat-option>
           </mat-autocomplete>
@@ -25,7 +27,9 @@
                  [formControl]="userPersonaFilterControl"
                  [matAutocomplete]="autoUserPersona">
           <mat-autocomplete autoActiveFirstOption #autoUserPersona="matAutocomplete">
-            <mat-option *ngFor="let option of userPersonaFilterOptionsCurrent$ | async" [value]="option">
+            <mat-option *ngFor="let option of userPersonaFilterOptionsCurrent$ | async" 
+            [value]="option"
+            (optionSelected)="optionSelectedHandler($event)">
               {{option}}
             </mat-option>
           </mat-autocomplete>
@@ -40,24 +44,26 @@
                  [formControl]="talukaFilterControl"
                  [matAutocomplete]="autoTalukka">
           <mat-autocomplete autoActiveFirstOption #autoTalukka="matAutocomplete">
-            <mat-option *ngFor="let option of talukaFilterOptionsCurrent$ | async" [value]="option">
+            <mat-option *ngFor="let option of talukaFilterOptionsCurrent$ | async" 
+            [value]="option"
+            (optionSelected)="optionSelectedHandler($event)">
               {{option}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
       </div>
 
-      <div *ngIf="false" class="filter-form-item channel-partner">
+      <div class="filter-form-item bi-territory">
         <mat-form-field class="example-full-width">
           <mat-label>BI Territory</mat-label>
-          <!-- placeholder="Pick one", aria-label="Channel Parnter" -->
-          <input type="text"
-                 
+          <input type="text"              
                  matInput
-                 [formControl]="channelParnterFilterControl"
-                 [matAutocomplete]="auto">
-          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-            <mat-option *ngFor="let option of channelParnterFilterOptionsCurrent$ | async" [value]="option">
+                 [formControl]="biTerriotoaryFilterControl"
+                 [matAutocomplete]="autoBiTerriotoary">
+          <mat-autocomplete autoActiveFirstOption #autoBiTerriotoary="matAutocomplete">
+            <mat-option *ngFor="let option of biTerriotoaryFilterOptionsCurrent$ | async" 
+            [value]="option"
+             (optionSelected)="optionSelectedHandler($event)">
               {{option}}
             </mat-option>
           </mat-autocomplete>

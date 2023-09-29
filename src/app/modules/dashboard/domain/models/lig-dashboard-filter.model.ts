@@ -8,6 +8,7 @@ import {map, startWith} from 'rxjs/operators';
 import { LigDashboardModel2} from './lig-dashboard2.model'
 
 import { FilterIModel } from './../../models/api/lig-data-reponse.model';
+import { LigDataFilterIModel } from "../../models/api/lig-data-request.model";
 
 
 
@@ -42,9 +43,6 @@ export class LigDashboardFilterModel {
     /* ------------------------ filter related propertires start --------------------- */
 
   
-    // get ligDataServiceLigData$() : Observable<Array<LigDashboardDataModel>> | undefined {
-    //   return this.ligDashBoardModel2.ligDataServiceLigData$
-    // }
     constructor(private ligDashBoardModel2 : LigDashboardModel2) {
 
     }
@@ -53,44 +51,20 @@ export class LigDashboardFilterModel {
       //this.subscribeFilterControlValueChanges();
     }
 
-    // private subscribeLigData(payLoad?:{user_persona:string}):void{
-
-    //     this.subsList.push(
-    //        this.ligDataServiceLigData$!.subscribe(
-    //         (ligData : any) =>{
-    //           if(ligData){
-    //             if(ligData.filters){
-    //               //console.log("user_persona unique val:", ligData.filters.user_persona)
-    //               this.setFilterValues(ligData.filters)
-    //             }         
-    //           }
-    //         }, 
-    //         (err:any) =>{console.log("getLigData API Error: ",err)} 
-    //       )
-    //     )
-    // }  
-
     public setFilterValues(filters:FilterIModel):void{
 
-      // this.channelParnterFilterOptionsAll = filters.ChannelPartner;
-      // this.userPersonaFilterOptionsAll = filters.LIGUserPersona;
-      // this.talukaFilterOptionsAll = filters.LIGTaluka;
-      // this.stateFilterOptionsAll = filters.LIGState;
-      // this.biTerriotoaryFilterOptionsAll = filters.BITerritory
+      this.channelParnterFilterOptionsAll = filters?.sap_cc_number;
+      this.userPersonaFilterOptionsAll = filters?.user_persona;
+      this.talukaFilterOptionsAll = filters?.taluka;
+      this.biTerriotoaryFilterOptionsAll = filters?.SALES_OFFICE_NAME
 
-      // this.channelParnterFilterOptionsCurrent$= of(filters.ChannelPartner)
-      // this.userPersonaFilterOptionsCurrent$= of(filters.LIGUserPersona)
-      // this.talukaFilterOptionsCurrent$= of(filters.LIGTaluka)
+      this.channelParnterFilterOptionsCurrent$= of(filters?.sap_cc_number)
+      this.userPersonaFilterOptionsCurrent$= of(filters?.user_persona)
+      this.talukaFilterOptionsCurrent$= of(filters?.taluka)
+      this.biTerriotoaryFilterOptionsCurrent$= of(filters?.SALES_OFFICE_NAME)
 
-      this.channelParnterFilterOptionsAll = filters?.ChannelPartner;
-      this.userPersonaFilterOptionsAll = filters?.LIGUserPersona;
-      this.talukaFilterOptionsAll = filters?.LIGTaluka;
-      this.stateFilterOptionsAll = filters?.LIGState;
-      this.biTerriotoaryFilterOptionsAll = filters?.BITerritory
+      this.subscribeFilterControlValueChanges();
 
-      this.channelParnterFilterOptionsCurrent$= of(filters?.ChannelPartner)
-      this.userPersonaFilterOptionsCurrent$= of(filters?.LIGUserPersona)
-      this.talukaFilterOptionsCurrent$= of(filters?.LIGTaluka)
     }
     public subscribeFilterControlValueChanges():void{
 
@@ -108,6 +82,12 @@ export class LigDashboardFilterModel {
       startWith(''),
       map(value => this._filter(this.talukaFilterOptionsAll , value || '')),
     );
+
+    this.biTerriotoaryFilterOptionsCurrent$ = this.biTerriotoaryFilterControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(this.biTerriotoaryFilterOptionsAll , value || '')),
+    );
+    
     
     }
     private _filter( filterData:Array<string> , filterValue: string): string[] {
@@ -124,9 +104,16 @@ export class LigDashboardFilterModel {
       
     }
     public formSubmitHandler():void{
-      const userPersona = this.userPersonaFilterControl.value
-      console.log("User Persona Filter Value", userPersona )
-      this.ligDashBoardModel2.initateGetLigDataCall({user_persona:userPersona})
+      const filterObj: LigDataFilterIModel ={
+        "month": "2023-08",
+        user_persona : this.userPersonaFilterControl.value
+      }
+      
+      console.log("User Persona Filter Value", filterObj )
+      this.ligDashBoardModel2.initateGetLigDataCall(filterObj)
+    }
+    public optionSelectedHandler(event:any):void {
+      console.log("fiterId")
     }
     public destroy():void{
       this.subsList.forEach((sub)=>sub.unsubscribe())
