@@ -43,7 +43,7 @@ export class LigDataService{
         //  "Bi_Sales_Area":"Rourkela Lubes"}
 
 
-        return this.httpClient.post<any>("http://10.29.2.4:8001/pukipy/lig_data2", payLoad )
+        return this.httpClient.post<any>("http://10.29.2.4:8001/pukipy/lig_data22", payLoad )
     }
 
 
