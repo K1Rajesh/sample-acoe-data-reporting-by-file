@@ -5,10 +5,9 @@ import { Observable , Subscription} from 'rxjs';
 import { LigDataService } from './../../services/lig-data.service';
 
 
-import { LigDataRequestIModel } from './../../models/api/lig-data-request.model';
+import { LigDataRequestIModel,LigDataFilterIModel } from './../../models/api/lig-data-request.model';
 import { LigDataResponseIModel } from './../../models/api/lig-data-reponse.model';
 import  { LigDashboardDataModel, LigDashboardTableViewHeaders } from '../../models/lig-dashboard-data.model'
-
 
 @Injectable()
 export class LigDashboardModel2 {
@@ -37,13 +36,18 @@ export class LigDashboardModel2 {
 
     }
     public getSourceDataclickHandler(): void {
-        this.initateGetLigDataCall();
-        this.subscribeGetLigDataCall(); 
+        this.initateGetLigDataCall({"month": "2023-08"});
     }
 
-    public initateGetLigDataCall(payLoad?:LigDataRequestIModel){
-        this.ligDataServiceLigData$ = this.ligDataService.getLigData(payLoad);
-
+    public initateGetLigDataCall(filters:LigDataFilterIModel){
+      const payLoad:LigDataRequestIModel = {
+        "user": {
+          "email": "abhisekdatta@corp.bharatpetroleum.com"
+        },
+        filters: filters
+      }
+      this.ligDataServiceLigData$ = this.ligDataService.getLigData(payLoad);
+      this.subscribeGetLigDataCall();
     }
     private subscribeGetLigDataCall(){
         this.subsList.push(
