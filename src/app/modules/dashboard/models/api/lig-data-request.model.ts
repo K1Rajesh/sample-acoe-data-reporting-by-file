@@ -11,7 +11,14 @@ export interface LigDataFilterIModel {
   "user_persona"? : string,
   "taluka"? : string,
   "sap_cc_number"? : string,
-  "SALES_GROUP_NAME"? : string
+  "SALES_GROUP_NAME"? : string,
+  "SALES_OFFICE_NAME"?: string,
+  "state"?: string,
+  "district"?: string,
+  "PRODUCT_NAME"?: string,
+  "PRODUCT_CODE"?: string,
+  "PRODUCT_BRAND"?: string,
+  [key: string]: string | undefined;
 }
 
 
