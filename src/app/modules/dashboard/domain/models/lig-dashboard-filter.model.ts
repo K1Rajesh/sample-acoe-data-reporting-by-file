@@ -77,7 +77,8 @@ export class LigDashboardFilterModel {
            {
             filterControl :  new FormControl(''),
             filterOptionsAll : [],
-            filterOptionsCurrent$ : new Observable<string[]>()
+            filterOptionsCurrent$ : new Observable<string[]>(),
+            filtersSelected : [],
           }
         )
       })
@@ -124,18 +125,50 @@ export class LigDashboardFilterModel {
       
     }
     public optionSelectedHandler(event: MatAutocompleteSelectedEvent, autoCompleteId:string):void {
+
+      //Add update filter value
       this.addNewFilter(autoCompleteId , event.option.value)
     }
+    public optionRemoveHandler(filterValue:string,filterKey:string,):void{
+      this.removeNewFilter(filterKey,filterValue)
+    }
     public addNewFilter(filterId:string,filterValue:string):void{
-      this.filtersApplied[filterId] = filterValue
+      //this.filtersApplied[filterId] = filterValue
+
+      //
+      const tempFilterControl = this.filterFormControls.get(filterId)
+      if(tempFilterControl && tempFilterControl.filtersSelected ){
+        tempFilterControl.filterControl.reset();
+        tempFilterControl.filtersSelected = [...tempFilterControl.filtersSelected,filterValue]
+        this.filterFormControls.set(filterId , tempFilterControl)
+      }
+      //
+      this.mapFilterControlsToFilter();
+      //
       this.initateGetLigDataApiCall(this.filtersApplied);
 
     }
-    public removeNewFilter(filterId:string): void{
-      if(this.filtersApplied[filterId]){
-        delete this.filtersApplied[filterId];
+    public removeNewFilter(filterKey:string,filterValue:string): void{
+      // if(this.filtersApplied[filterId]){
+      //   delete this.filtersApplied[filterId];
+      // }
+
+      const tempFilterControl = this.filterFormControls.get(filterKey)
+      if(tempFilterControl && tempFilterControl.filtersSelected && tempFilterControl.filtersSelected .length >0){
+        const removedFilter = tempFilterControl.filtersSelected.filter((filterSelectedEle)=>
+          filterSelectedEle !== filterValue
+        )
+        tempFilterControl.filtersSelected = removedFilter
+        this.filterFormControls.set(filterKey , tempFilterControl)
       }
+      
+      this.mapFilterControlsToFilter();
       this.initateGetLigDataApiCall(this.filtersApplied);
+    }
+    public mapFilterControlsToFilter(){
+      this.filterFormControls.forEach((value,key) => {
+        this.filtersApplied[key]=value.filtersSelected[0];
+      });
     }
     public formSubmitHandler():void{
       const filterObj: LigDataFilterIModel ={

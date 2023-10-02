@@ -3,6 +3,10 @@
           
       <div class="filter-form-item channel-partner"
        *ngFor="let filter of filterFormControls | keyvalue">
+
+        <button *ngFor="let selctedFilterValue of filter.value.filtersSelected"
+         (click)="optionRemoveHandler(selctedFilterValue,filter.key)">{{selctedFilterValue}}</button>
+
         <mat-form-field class="example-full-width">
           <mat-label>{{ filter.key | ligHeader }}</mat-label>
           <input type="text" matInput

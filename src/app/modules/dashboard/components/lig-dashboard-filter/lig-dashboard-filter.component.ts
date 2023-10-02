@@ -77,6 +77,9 @@ export class LigDashboardFilterComponent implements OnInit,OnChanges, OnDestroy 
   public optionSelectedHandler(event: MatAutocompleteSelectedEvent, autoCompleteId:any): void {
     this.ligDashboardFilterModel.optionSelectedHandler(event,autoCompleteId)
   }
+  public optionRemoveHandler(selctedFilterValue:string,filterKey:string){
+    this.ligDashboardFilterModel.optionRemoveHandler(selctedFilterValue,filterKey)
+  }
   ngOnDestroy(): void {
   }
 
