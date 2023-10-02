@@ -4,15 +4,14 @@
         <mat-form-field class="example-full-width">
           <mat-label>Channel Parnter</mat-label>
           <!-- placeholder="Pick one", aria-label="Channel Parnter" -->
-          <input type="text"
-                 
-                 matInput
+          <input type="text" matInput
                  [formControl]="channelParnterFilterControl"
                  [matAutocomplete]="autoChannelPartner">
-          <mat-autocomplete autoActiveFirstOption #autoChannelPartner="matAutocomplete">
+          <mat-autocomplete autoActiveFirstOption [id]="'channelPartnerMatAutoId'"
+          #autoChannelPartner="matAutocomplete"
+          (optionSelected)="optionSelectedHandler($event,autoChannelPartner)">
             <mat-option *ngFor="let option of channelParnterFilterOptionsCurrent$ | async" 
-            [value]="option"
-            (optionSelected)="optionSelectedHandler($event)">
+            [value]="option">
               {{option}}
             </mat-option>
           </mat-autocomplete>
@@ -26,10 +25,13 @@
                  matInput
                  [formControl]="userPersonaFilterControl"
                  [matAutocomplete]="autoUserPersona">
-          <mat-autocomplete autoActiveFirstOption #autoUserPersona="matAutocomplete">
+
+          <mat-autocomplete autoActiveFirstOption 
+            [id]="'userPersona'"
+            #autoUserPersona="matAutocomplete"
+            (optionSelected)="optionSelectedHandler($event,autoUserPersona)">
             <mat-option *ngFor="let option of userPersonaFilterOptionsCurrent$ | async" 
-            [value]="option"
-            (optionSelected)="optionSelectedHandler($event)">
+            [value]="option">
               {{option}}
             </mat-option>
           </mat-autocomplete>
@@ -45,8 +47,7 @@
                  [matAutocomplete]="autoTalukka">
           <mat-autocomplete autoActiveFirstOption #autoTalukka="matAutocomplete">
             <mat-option *ngFor="let option of talukaFilterOptionsCurrent$ | async" 
-            [value]="option"
-            (optionSelected)="optionSelectedHandler($event)">
+            [value]="option">
               {{option}}
             </mat-option>
           </mat-autocomplete>
@@ -62,28 +63,25 @@
                  [matAutocomplete]="autoBiTerriotoary">
           <mat-autocomplete autoActiveFirstOption #autoBiTerriotoary="matAutocomplete">
             <mat-option *ngFor="let option of biTerriotoaryFilterOptionsCurrent$ | async" 
-            [value]="option"
-             (optionSelected)="optionSelectedHandler($event)">
+            [value]="option">
               {{option}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
       </div>
-      <div *ngIf="false" class="filter-form-item channel-partner">
-        <mat-form-field class="example-full-width">
-          <mat-label>BI Sales Area</mat-label>
-          <!-- placeholder="Pick one", aria-label="Channel Parnter" -->
-          <input type="text"
-                 
-                 matInput
-                 [formControl]="channelParnterFilterControl"
-                 [matAutocomplete]="auto">
-          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-            <mat-option *ngFor="let option of channelParnterFilterOptionsCurrent$ | async" [value]="option">
-              {{option}}
+      <div  class="filter-form-item test">
+        <!-- <mat-form-field>
+          <input type="text" placeholder="Select an option" matInput [formControl]="myControl" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="optionSelected($event)">
+            <mat-option *ngFor="let option of options" [value]="option">
+              {{ option }}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
+        
+        <div *ngIf="selectedOption">
+          You selected: {{ selectedOption }}
+        </div>         -->
       </div>
       <div *ngIf="false" class="filter-form-item channel-partner">
         <mat-form-field class="example-full-width">

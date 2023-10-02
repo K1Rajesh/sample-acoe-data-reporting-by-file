@@ -2,7 +2,11 @@ import { Component, OnInit,OnChanges, OnDestroy, Input,SimpleChanges } from '@an
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 
-import { LigDashboardFilterModel } from '../../domain/models/lig-dashboard-filter.model'
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+
+
+import { LigDashboardFilterModel } from '../../domain/models/lig-dashboard-filter.model';
+
 
 @Component({
   selector: 'app-lig-dashboard-filter',
@@ -62,8 +66,8 @@ export class LigDashboardFilterComponent implements OnInit,OnChanges, OnDestroy 
   public formSubmitHandler():void {
     this.ligDashboardFilterModel.formSubmitHandler()
   }
-  public optionSelectedHandler(event:any):void {
-    this.ligDashboardFilterModel.optionSelectedHandler(event)
+  public optionSelectedHandler(event: MatAutocompleteSelectedEvent, autoCompleteId:any): void {
+    this.ligDashboardFilterModel.optionSelectedHandler(event,autoCompleteId)
   }
   ngOnDestroy(): void {
   }

@@ -4,6 +4,8 @@ import {FormControl} from '@angular/forms';
 import { Observable , Subscription, of } from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+
 
 import { LigDashboardModel2} from './lig-dashboard2.model'
 
@@ -11,6 +13,13 @@ import { FilterIModel } from './../../models/api/lig-data-reponse.model';
 import { LigDataFilterIModel } from "../../models/api/lig-data-request.model";
 
 
+export interface FiterFormControlIModel {
+  [key : string] :{
+    filterControl : FormControl;
+    filterOptionsAll: Array<string>;
+    filterOptionsCurrent$: Observable<string[]> 
+  }
+}
 
 @Injectable()
 export class LigDashboardFilterModel {
@@ -42,9 +51,11 @@ export class LigDashboardFilterModel {
 
     /* ------------------------ filter related propertires start --------------------- */
 
+    private filtersApplied : LigDataFilterIModel;
+
   
     constructor(private ligDashBoardModel2 : LigDashboardModel2) {
-
+      this.filtersApplied = { "month": "2023-08"}
     }
     init(){
       //this.subscribeLigData();
@@ -103,6 +114,20 @@ export class LigDashboardFilterModel {
       }
       
     }
+    public optionSelectedHandler(event: MatAutocompleteSelectedEvent, autoCompleteId:string):void {
+      this.addNewFilter(autoCompleteId , event.option.value)
+    }
+    public addNewFilter(filterId:string,filterValue:string):void{
+      this.filtersApplied[filterId] = filterValue
+      this.initateGetLigDataApiCall(this.filtersApplied);
+
+    }
+    public removeNewFilter(filterId:string): void{
+      if(this.filtersApplied[filterId]){
+        delete this.filtersApplied[filterId];
+      }
+      this.initateGetLigDataApiCall(this.filtersApplied);
+    }
     public formSubmitHandler():void{
       const filterObj: LigDataFilterIModel ={
         "month": "2023-08",
@@ -110,12 +135,12 @@ export class LigDashboardFilterModel {
       }
       
       console.log("User Persona Filter Value", filterObj )
-      this.ligDashBoardModel2.initateGetLigDataCall(filterObj)
-    }
-    public optionSelectedHandler(event:any):void {
-      console.log("fiterId")
+      this.initateGetLigDataApiCall(filterObj);
     }
     public destroy():void{
       this.subsList.forEach((sub)=>sub.unsubscribe())
+    }
+    public initateGetLigDataApiCall(filterObj: LigDataFilterIModel ){
+      this.ligDashBoardModel2.initateGetLigDataCall(filterObj)
     }
 }
