@@ -11,22 +11,29 @@ import { LigDashboardModel2} from './lig-dashboard2.model'
 
 import { FilterIModel } from './../../models/api/lig-data-reponse.model';
 import { LigDataFilterIModel } from "../../models/api/lig-data-request.model";
+import { FiterControlIModel } from "../../models/lig-dashboard-filter.model";
 
 
-export interface FiterFormControlIModel {
-  [key : string] :{
-    filterControl : FormControl;
-    filterOptionsAll: Array<string>;
-    filterOptionsCurrent$: Observable<string[]> 
-  }
-}
 
 @Injectable()
 export class LigDashboardFilterModel {
 
     private subsList : Array<Subscription> = new Array<Subscription>();
 
-    public filters : any;
+    public filtersUniqueValues : any;
+
+    public filtersAvailable : Array<string> = [
+      "user_persona",
+      "taluka",
+      "sap_cc_number",
+      "SALES_GROUP_NAME",
+      "SALES_OFFICE_NAME",
+      "state",
+      "district",
+      "PRODUCT_NAME",
+      "PRODUCT_CODE",
+      "PRODUCT_BRAND",
+    ]
 
     /* ------------------------ filter related propertires start --------------------- */
     public channelParnterFilterControl = new FormControl('');
@@ -49,6 +56,8 @@ export class LigDashboardFilterModel {
     public biTerriotoaryFilterOptionsAll: string[] = [];
     public biTerriotoaryFilterOptionsCurrent$: Observable<string[]> = new Observable<string[]>();
 
+    public filterFormControls : Map<string , FiterControlIModel> = new Map<string , FiterControlIModel>();
+
     /* ------------------------ filter related propertires start --------------------- */
 
     private filtersApplied : LigDataFilterIModel;
@@ -60,46 +69,46 @@ export class LigDashboardFilterModel {
     init(){
       //this.subscribeLigData();
       //this.subscribeFilterControlValueChanges();
+      this.initFilterFormControls();
     }
+    public initFilterFormControls(): void {
+      this.filtersAvailable.forEach(filter=>{
+        this.filterFormControls.set( filter, 
+           {
+            filterControl :  new FormControl(''),
+            filterOptionsAll : [],
+            filterOptionsCurrent$ : new Observable<string[]>()
+          }
+        )
+      })
+    }
+    public setFilterValues():void{
 
-    public setFilterValues(filters:FilterIModel):void{
-
-      this.channelParnterFilterOptionsAll = filters?.sap_cc_number;
-      this.userPersonaFilterOptionsAll = filters?.user_persona;
-      this.talukaFilterOptionsAll = filters?.taluka;
-      this.biTerriotoaryFilterOptionsAll = filters?.SALES_OFFICE_NAME
-
-      this.channelParnterFilterOptionsCurrent$= of(filters?.sap_cc_number)
-      this.userPersonaFilterOptionsCurrent$= of(filters?.user_persona)
-      this.talukaFilterOptionsCurrent$= of(filters?.taluka)
-      this.biTerriotoaryFilterOptionsCurrent$= of(filters?.SALES_OFFICE_NAME)
+      this.filtersAvailable.forEach((filter)=>{
+        const tempfilterFormControl = this.filterFormControls.get(filter);
+        if(tempfilterFormControl){
+          tempfilterFormControl.filterOptionsAll = this.filtersUniqueValues[filter]
+          this.filterFormControls.set(filter , tempfilterFormControl);
+        }
+      })
 
       this.subscribeFilterControlValueChanges();
-
     }
+
     public subscribeFilterControlValueChanges():void{
 
-      this.channelParnterFilterOptionsCurrent$ = this.channelParnterFilterControl.valueChanges.pipe(
-        startWith(''),
-        map(value => this._filter(this.channelParnterFilterOptionsAll , value || '')),
-      );
+      this.filtersAvailable.forEach((filter)=>{
+        const tempfilterFormControl = this.filterFormControls.get(filter);
 
-      this.userPersonaFilterOptionsCurrent$ = this.userPersonaFilterControl.valueChanges.pipe(
-        startWith(''),
-        map(value => this._filter(this.userPersonaFilterOptionsAll , value || '')),
-     );
+        if(tempfilterFormControl){
+          tempfilterFormControl.filterOptionsCurrent$ = tempfilterFormControl.filterControl?.valueChanges.pipe(
+            startWith(''),
+            map(value => this._filter(tempfilterFormControl.filterOptionsAll , value || '')),
+          )
+        }
 
-     this.talukaFilterOptionsCurrent$ = this.talukaFilterControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(this.talukaFilterOptionsAll , value || '')),
-    );
+      })
 
-    this.biTerriotoaryFilterOptionsCurrent$ = this.biTerriotoaryFilterControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(this.biTerriotoaryFilterOptionsAll , value || '')),
-    );
-    
-    
     }
     private _filter( filterData:Array<string> , filterValue: string): string[] {
       const filterValueLower = filterValue.toLowerCase();

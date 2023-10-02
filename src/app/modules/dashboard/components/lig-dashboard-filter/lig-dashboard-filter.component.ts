@@ -7,6 +7,8 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 import { LigDashboardFilterModel } from '../../domain/models/lig-dashboard-filter.model';
 
+import { FiterControlIModel } from "../../models/lig-dashboard-filter.model";
+
 
 @Component({
   selector: 'app-lig-dashboard-filter',
@@ -20,10 +22,10 @@ export class LigDashboardFilterComponent implements OnInit,OnChanges, OnDestroy 
 
   @Input() 
   get filters():any{
-    return this.ligDashboardFilterModel.filters;
+    return this.ligDashboardFilterModel.filtersUniqueValues;
   }
   set filters(val:any){
-    this.ligDashboardFilterModel.filters=val;
+    this.ligDashboardFilterModel.filtersUniqueValues=val;
   }
 
   get channelParnterFilterControl():FormControl{
@@ -52,6 +54,12 @@ export class LigDashboardFilterComponent implements OnInit,OnChanges, OnDestroy 
     return this.ligDashboardFilterModel.biTerriotoaryFilterOptionsCurrent$
   }
 
+  get filterFormControls(): Map<string , FiterControlIModel>{
+    return this.ligDashboardFilterModel.filterFormControls
+  }
+  get filtersAvailable():Array<string>{
+    return this.ligDashboardFilterModel.filtersAvailable;
+  }
 
 
   ngOnInit(): void {
@@ -59,7 +67,7 @@ export class LigDashboardFilterComponent implements OnInit,OnChanges, OnDestroy 
   }
   ngOnChanges(changes: SimpleChanges):void{
     if(changes.filters){
-      this.ligDashboardFilterModel.setFilterValues(this.filters);
+      this.ligDashboardFilterModel.setFilterValues();
     }
     
   }
